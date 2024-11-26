@@ -64,12 +64,13 @@ require CAKE . 'functions.php';
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-if (!env('MY_ALBUMS_APP') && file_exists(CONFIG . '.env.local')) {
+if (!getenv('APP_NAME') && file_exists(CONFIG . '.env.local')) {
+    // Load environment variables from the .env.local file
     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env.local']);
     $dotenv->parse()
-        ->putenv()
-        ->toEnv()
-        ->toServer();
+        ->putenv()  // Loads environment variables into the PHP environment
+        ->toEnv()   // Makes them accessible via getenv()
+        ->toServer(); // Makes them available in the web server (if needed)
 }
 
 /*

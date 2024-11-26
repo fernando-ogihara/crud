@@ -51,3 +51,53 @@ Other environment agnostic settings can be changed in `config/app.php`.
 The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
+
+## APPLICATION
+
+- Run the application with:
+  ```bash
+  bin/cake server
+
+Access the application at: http://localhost:8765/
+
+    If necessary, clear the cache by running:
+
+    bin/cake cache clear_all
+
+Features
+
+    The application runs on a single page:
+        If albums exist in the database, they will be displayed.
+        If no albums are available, the user can add new albums by clicking the PLUS button.
+
+    Adding an Album:
+        The user must select an artist, enter an album name, and select the year.
+        The Add button is only enabled if all fields are populated. If any field is empty, the button will be disabled with the text "not allowed".
+
+    Notifications:
+        After adding, editing, or deleting an album, a success message will be displayed at the top of the page.
+        The success message will automatically disappear after 1.5 seconds.
+        Additionally, an email notification will be sent to the registered email address with details about the action performed.
+
+    Deleting an Album:
+        A confirmation modal will be shown to ensure the user intends to delete the album. If the deletion was accidental, the user can cancel the action.
+
+## PHP TESTS
+
+To run PHP tests, navigate to the app folder and run:
+
+./vendor/bin/phpunit
+
+## JS TESTS
+
+To run JavaScript tests using Jest:
+
+    In the app folder, install Jest and jsdom:
+
+npm install --save-dev jest jsdom
+
+Once installed, run the JavaScript tests with:
+
+    npm test
+
+
