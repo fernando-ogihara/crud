@@ -90,6 +90,8 @@ CREATE TABLE `albums` (
 
 ## APPLICATION
 
+** add the .env.local file to the config folder **
+
 - Run the application with:
   ```bash
   bin/cake server
