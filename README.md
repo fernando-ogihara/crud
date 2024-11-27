@@ -88,6 +88,8 @@ CREATE TABLE `albums` (
   `modified` DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+```
+
 ## APPLICATION
 
 ** add the .env.local file to the config folder **
