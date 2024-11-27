@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use App\Service\ArtistsApi;  // Import the ArtistsApi service class
-use App\Model\BusinessLogic\ArtistsData;
+use App\Service\ArtistsApi;
 use App\Model\BusinessLogic\SendEmail;
 use Cake\Log\Log;
 
@@ -13,19 +12,16 @@ class AlbumsController extends AppController
     private $artistsApi;
 
     /**
-     * Initialize the controller
+     * Initialize method
      *
-     * @return void
+     * This method is called before every action in the controller.
      */
     public function initialize(): void
     {
         parent::initialize();
 
-        // Instantiate the ArtistsApi service with the API URL and API key
-        $this->artistsApi = new ArtistsApi(
-            'https://europe-west1-madesimplegroup-151616.cloudfunctions.net/artists-api-controller',
-            getenv('ARTISTS_API_KEY')
-        );
+        // Instantiate the ArtistsApi service
+        $this->artistsApi = new ArtistsApi(getenv('ARTISTS_API_KEY'));
     }
 
     /**
@@ -35,13 +31,11 @@ class AlbumsController extends AppController
      */
     public function index()
     {
-        // Get artists from the API
-        $artistsData = $this->artistsApi->getArtists();
-        $artistsDataObj = new ArtistsData();
-        $artists = $artistsDataObj->refactorArtistsData($artistsData);
-        
         // Retrieve albums from the database
         $albums = $this->Albums->find('all');
+
+        // Get the list of artists from the API
+        $artists = $this->artistsApi->getArtists();
 
         // Pass the data to the view
         $this->set(compact('albums', 'artists'));
@@ -57,9 +51,7 @@ class AlbumsController extends AppController
         $album = $this->Albums->newEmptyEntity();  // Create a new album entity
 
         // Get the list of artists from the API
-        $artistsData = $this->artistsApi->getArtists();
-        $artistsDataObj = new ArtistsData();
-        $artists = $artistsDataObj->refactorArtistsData($artistsData);
+        $artists = $this->artistsApi->getArtists();
 
         if ($this->request->is('post')) {
             // Load the form data, including the artist_name field
@@ -69,9 +61,13 @@ class AlbumsController extends AppController
             if ($this->Albums->save($album)) {
                 $this->Flash->success('Album saved successfully.');
 
-                // Call the email sending function
-                $notificationAction = new SendEmail();
-                $notificationAction->sendConfirmationEmail($album, $artists, 'added');
+                // Call the send email function -> I’ve set up Mailtrap for testing. 
+                //Since it's just a simple email, there's no need to use CakePHP’s 
+                //Queue system — it’s more useful for sending bulk emails in the background.
+
+                // uncomment below to test the email notification
+                // $notificationAction = new SendEmail();
+                // $notificationAction->sendConfirmationEmail($album, $artists, 'added');
                 
                 return $this->redirect(['action' => 'index']);
             }
@@ -102,15 +98,13 @@ class AlbumsController extends AppController
 
         $album = $this->Albums->get($id);
 
-        // Get the list of artists from the API
-        $artistsData = $this->artistsApi->getArtists();
-        $artistsDataObj = new ArtistsData();
-        $artists = $artistsDataObj->refactorArtistsData($artistsData);
-
         if (!$album) {
             $this->Flash->error(__('Album not found.'));
             return $this->redirect(['action' => 'index']);
         }
+
+        // Get the list of artists from the API
+        $artists = $this->artistsApi->getArtists();
 
         if ($this->request->is(['post', 'put'])) {
             $album = $this->Albums->patchEntity($album, $this->request->getData());
@@ -118,9 +112,13 @@ class AlbumsController extends AppController
             if ($this->Albums->save($album)) {
                 $this->Flash->success(__('Album edited successfully.'));
 
-                // Call the email sending function
-                $notificationAction = new SendEmail();
-                $notificationAction->sendConfirmationEmail($album, $artists, 'edited');  // Passing the album to the email function
+                // Call the send email function -> I’ve set up Mailtrap for testing. 
+                //Since it's just a simple email, there's no need to use CakePHP’s 
+                //Queue system — it’s more useful for sending bulk emails in the background.
+
+                // uncomment below to test the email notification
+                // $notificationAction = new SendEmail();
+                // $notificationAction->sendConfirmationEmail($album, $artists, 'edited');  // Passing the album to the email function
                 
                 return $this->redirect(['action' => 'index']);
             }
@@ -133,7 +131,6 @@ class AlbumsController extends AppController
 
         $this->set(compact('album', 'artists'));
     }
-
 
     /**
      * Delete an album
@@ -153,18 +150,20 @@ class AlbumsController extends AppController
         $album = $this->Albums->get($id);
 
         // Get the list of artists from the API
-        $artistsData = $this->artistsApi->getArtists();
-        $artistsDataObj = new ArtistsData();
-        $artists = $artistsDataObj->refactorArtistsData($artistsData);
+        $artists = $this->artistsApi->getArtists();
 
         // Attempt to delete the album
         if ($this->Albums->delete($album)) {
             // Display success message
             $this->Flash->success(__('Album deleted successfully.'));
             
-            // Call the email sending function
-            $notificationAction = new SendEmail();
-            $notificationAction->sendConfirmationEmail($album, $artists, 'deleted');  // Passing the album to the email function
+            // Call the send email function -> I’ve set up Mailtrap for testing. 
+            //Since it's just a simple email, there's no need to use CakePHP’s 
+            //Queue system — it’s more useful for sending bulk emails in the background.
+
+            // uncomment below to test the email notification
+            // $notificationAction = new SendEmail();
+            // $notificationAction->sendConfirmationEmail($album, $artists, 'deleted');  // Passing the album to the email function
             
             // Redirect to the index page or another page
             return $this->redirect(['action' => 'index']);

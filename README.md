@@ -52,6 +52,42 @@ The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
 framework by default. You can, however, replace it with any other library or
 custom styles.
 
+## MAILTRAP
+
+For testing purposes, I configured Mailtrap. You can create a free account here: https://mailtrap.io/.
+
+After creating a free account, go to the dashboard, then click on Email Testing -> Inboxes.
+
+Next, click on the free inbox, and in the Integration tab, you will find the Username and Password. These values should be added to your .env.local file.
+
+## DATABASE
+
+To set up the database, you can either:
+
+### Option 1: Import the SQL file
+
+1. In the `Database` folder, locate the `albums.sql` file.
+2. Import the SQL file into your MySQL database using a tool like phpMyAdmin, MySQL Workbench, or via the command line.
+
+### Option 2: Run the SQL query directly
+
+If you prefer to run the SQL commands manually, execute the following queries in your MySQL client:
+
+```sql
+CREATE DATABASE albums_db;
+
+USE albums_db;
+
+CREATE TABLE `albums` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `artist_name` VARCHAR(255) NOT NULL,
+  `album_name` VARCHAR(255) NOT NULL,
+  `album_year` INT(11) NOT NULL,
+  `published` TINYINT(1) DEFAULT 0,
+  `created` DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  `modified` DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 ## APPLICATION
 
 - Run the application with:
@@ -77,24 +113,26 @@ Features
     Notifications:
         After adding, editing, or deleting an album, a success message will be displayed at the top of the page.
         The success message will automatically disappear after 1.5 seconds.
-        Additionally, an email notification will be sent to the registered email address with details about the action performed.
+        **Additionally, an email notification will be sent to the registered email address with details about the action performed.
+        (If a email service is set - for now in the controller this action is commented out)
 
     Deleting an Album:
         A confirmation modal will be shown to ensure the user intends to delete the album. If the deletion was accidental, the user can cancel the action.
 
-## PHP TESTS
+## PHP TESTS (an example)
 
 To run PHP tests, navigate to the app folder and run:
 
 ./vendor/bin/phpunit
 
-## JS TESTS
+## JS TESTS (an example)
 
 To run JavaScript tests using Jest:
 
     In the app folder, install Jest and jsdom:
 
-npm install --save-dev jest jsdom
+    npm install --save-dev jest
+    npm install --save-dev jest jsdom
 
 Once installed, run the JavaScript tests with:
 

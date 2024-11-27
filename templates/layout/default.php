@@ -40,7 +40,6 @@ $cakeDescription = 'MoneyPenny - Technical Test';
             <a href="<?= $this->Url->build('/albums') ?>"><span>MoneyPenny - Technical Test</span></a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="..\assets\documents\cake_application.pdf">Readme</a>
             <a target="_blank" rel="noopener" href="..\assets\documents\technical_task.pdf">Requirements</a>
         </div>
     </nav>
