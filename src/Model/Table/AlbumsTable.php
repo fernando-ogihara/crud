@@ -10,7 +10,7 @@ class AlbumsTable extends Table
     {
         parent::initialize($config);
 
-        // Defina o nome da tabela e a chave primária
+        // Set the table name and primary key
         $this->setTable('albums');
         $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');

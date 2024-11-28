@@ -1,18 +1,18 @@
 import { validateForm } from './validateForm.js';
 
 export function showEditForm(id, name, year, artistId) {
-    // Preencher os campos com os dados do álbum
+    // Fill in the fields with the album data
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-year').value = year;
     document.getElementById('edit-artist-id').value = artistId;
     document.getElementById('edit-id').value = id;
 
-    // Seleciona o formulário de edição
+     // Select the edit form
     var form = document.getElementById('edit-album-form');
     
-    // Verificar se o formulário está visível
+    // Check if the form is visible
     if (form.classList.contains('show')) {
-        // Remover a classe 'show' para iniciar a transição
+        // Remove the 'show' class to start the transition
         form.classList.remove('show');
         
         // Atraso para garantir que a transição aconteça antes de esconder
@@ -23,10 +23,10 @@ export function showEditForm(id, name, year, artistId) {
         // Exibir o formulário
         form.style.display = 'block';
         
-        // Adicionar a classe 'show' para iniciar a transição suave
+        // Add 'show' class to start smooth transition
         setTimeout(() => {
             form.classList.add('show');
-        }, 10);  // Atraso para garantir que o 'display' seja alterado antes da animação
+        }, 10);  // Delay to ensure the 'display' changes before the animation
     }
 
     // Chama a função de validação dos campos de edição
@@ -34,16 +34,16 @@ export function showEditForm(id, name, year, artistId) {
 }
 
 export function addEditEventListener() {
-    // Adicionar o event listener para todos os botões "Edit"
+    // Call the validation function for the edit fields
     document.querySelectorAll('.edit-album-btn').forEach(button => {
         button.addEventListener('click', function() {
-            // Obter os dados do álbum dos atributos de dados do botão
+            // Get the album data from the button data attributes
             var id = this.getAttribute('data-id');
             var name = this.getAttribute('data-name');
             var year = this.getAttribute('data-year');
             var artist = this.getAttribute('data-artist');
 
-            // Chamar a função para exibir o formulário de edição com os dados do álbum
+            // Call the function to display the edit form with the album data
             showEditForm(id, name, year, artist);
         });
     });
