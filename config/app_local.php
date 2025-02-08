@@ -84,7 +84,7 @@ return [
     'EmailTransport' => [
         'default' => [
             'host' => 'sandbox.smtp.mailtrap.io', // MAILTRAP temporary use
-            'port' => 2525,
+            'port' => 587,
             'username' => getenv('MAILTRAP_USERNAME'), // temporary use
             'password' => getenv('MAILTRAP_PASSWORD'), // temporary use
             'className' => 'Smtp'

@@ -4,6 +4,8 @@
     <button id="add-album-btn">+</button>
 </div>
 
+<!-- conditional message added 28/11 -->
+<?php if (!empty($albums)): ?>
 <table>
     <thead>
         <tr>
@@ -32,9 +34,16 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<!-- warning message added 28/11 -->
+<?php else: ?>
+    <p id="no-albums-message">No albums found. Please add some albums to display them here.</p>
+<?php endif; ?>
 
 <!-- Load the add album form element -->
 <?= $this->element('add_album_form', ['artists' => $artists]) ?>
 
-<!-- Load the edit album form element -->
-<?= $this->element('edit_album_form', ['album' => $album, 'artists' => $artists]) ?>
+<!-- Conditional Added 28/11 -->
+<?php if (isset($album)): ?>
+    <!-- Load the edit album form element -->
+    <?= $this->element('edit_album_form', ['album' => $album, 'artists' => $artists]) ?>    
+<?php endif; ?>
