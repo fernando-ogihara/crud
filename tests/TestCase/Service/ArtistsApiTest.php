@@ -14,40 +14,45 @@ class ArtistsApiTest extends TestCase
      * This test checks if the Artists API is working correctly and returns the expected data.
      */
     public function testGetArtistsRealCall()
-    {
-        // Set up the API URL and your API key (you can load it from the .env file)
-        $url = 'https://europe-west1-madesimplegroup-151616.cloudfunctions.net/artists-api-controller';
-        $apiKey = getenv('ARTISTS_API_KEY'); // Get the API key from environment variables
+    {   
+        // Instantiating the ArtistsApi service
+        $artistsApi = new ArtistsApi(getenv('ARTISTS_API_KEY'));
         
-        // Instantiate the ArtistsApi service with the API URL and key
-        $artistsApi = new ArtistsApi($url, $apiKey);
-        
-        // Make the real API call to fetch the artist data
+        // Making the real API call to fetch artist data
         $artistsData = $artistsApi->getArtists();
 
-        // Check if the response contains the 'json' key
-        $this->assertArrayHasKey('json', $artistsData, 'The response should contain the "json" key.');
-        echo "Test passed: The response contains the 'json' key.\n";
+        // Checking if the response is an array
+        $this->assertIsArray($artistsData, 'The response should be an array of artists.');
+        echo "Test passed: The response is an array.\n";
 
-        // Check if the 'json' data is an array of artists
-        $this->assertIsArray($artistsData['json'], 'The "json" key should contain an array of artists.');
-        echo "Test passed: The 'json' key contains an array of artists.\n";
-
-        // Verify that the list of artists is not empty
-        $this->assertNotEmpty($artistsData['json'], 'The list of artists should not be empty.');
+        // Checking if the array contains at least one artist
+        $this->assertNotEmpty($artistsData, 'The list of artists should not be empty.');
         echo "Test passed: The list of artists is not empty.\n";
 
-        // Check if the first artist in the list has the expected fields
-        $firstArtist = $artistsData['json'][0][0]; // Access the first artist in the list
-        
-        $this->assertArrayHasKey('id', $firstArtist, 'Each artist should have an "id" key.');
-        echo "Test passed: The first artist has the 'id' key.\n";
-        
-        $this->assertArrayHasKey('name', $firstArtist, 'Each artist should have a "name" key.');
-        echo "Test passed: The first artist has the 'name' key.\n";
+        // Checking if the first item in the array has an id and name
+        $firstArtistId = key($artistsData);  // Getting the key of the first artist (ID)
+        $firstArtistName = current($artistsData);  // Getting the value of the first artist (name)
 
-        $this->assertArrayHasKey('twitter', $firstArtist, 'Each artist should have a "twitter" key.');
-        echo "Test passed: The first artist has the 'twitter' key.\n";
+        $this->assertEquals(1, $firstArtistId, 'The first artist should have ID 1.');
+        echo "Test passed: The first artist has ID 1.\n";
+        
+        $this->assertEquals('Justin Bieber', $firstArtistName, 'The first artist should be "Justin Bieber".');
+        echo "Test passed: The first artist is Justin Bieber.\n";
+        
+        // Checking if there is a match for the artist Katy Perry
+        $this->assertArrayHasKey(2, $artistsData, 'The response should contain the artist with ID 2.');
+        $this->assertEquals('Katy Perry', $artistsData[2], 'The artist with ID 2 should be "Katy Perry".');
+        echo "Test passed: The artist with ID 2 is Katy Perry.\n";
+
+        // Checking if the last artist has the correct name
+        $lastArtistId = end(array_keys($artistsData));  // Getting the ID of the last artist
+        $lastArtistName = end($artistsData);  // Getting the name of the last artist
+
+        $this->assertEquals(19, $lastArtistId, 'The last artist should have ID 19.');
+        echo "Test passed: The last artist has ID 19.\n";
+
+        $this->assertEquals('Lil Wayne', $lastArtistName, 'The last artist should be "Lil Wayne".');
+        echo "Test passed: The last artist is Lil Wayne.\n";
         
         // Final confirmation that the test passed
         echo "Test passed: The Artists API is working correctly and returned the expected data.\n";

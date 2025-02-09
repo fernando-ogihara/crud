@@ -32,10 +32,10 @@ class AlbumsController extends AppController
     public function index()
     {
         // Retrieve albums from the database
-        $albums = $this->Albums->find('all');
+        $albums = $this->Albums->find('all')->toArray();
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists();
+        $artists = $this->artistsApi->getArtists() ?: [];
 
         // Pass the data to the view
         $this->set(compact('albums', 'artists'));
@@ -51,7 +51,7 @@ class AlbumsController extends AppController
         $album = $this->Albums->newEmptyEntity();  // Create a new album entity
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists();
+        $artists = $this->artistsApi->getArtists() ?: [];
 
         if ($this->request->is('post')) {
             // Load the form data, including the artist_name field
@@ -104,7 +104,7 @@ class AlbumsController extends AppController
         }
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists();
+        $artists = $this->artistsApi->getArtists() ?: [];
 
         if ($this->request->is(['post', 'put'])) {
             $album = $this->Albums->patchEntity($album, $this->request->getData());
