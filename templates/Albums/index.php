@@ -4,9 +4,7 @@
     <button id="add-album-btn">+</button>
 </div>
 
-<!-- conditional message added 28/11 -->
-<?php if (!empty($albums)): ?>
-    <table>
+<table>
     <thead>
         <tr>
             <th>Artist</th>
@@ -42,8 +40,5 @@
 <!-- Load the add album form element -->
 <?= $this->element('add_album_form', ['artists' => $artists]) ?>
 
-<!-- Conditional Added 28/11 -->
-<?php if (isset($album)): ?>
-    <!-- Load the edit album form element -->
-    <?= $this->element('edit_album_form', ['album' => $album, 'artists' => $artists]) ?>    
-<?php endif; ?>
+<!-- Load the edit album form element -->
+<?= $this->element('edit_album_form', ['album' => $album, 'artists' => $artists]) ?>

@@ -32,7 +32,7 @@ class AlbumsController extends AppController
     public function index()
     {
         // Retrieve albums from the database
-        $albums = $this->Albums->find('all')->toArray();
+        $albums = $this->Albums->find('all');
 
         // Get the list of artists from the API
         $artists = $this->artistsApi->getArtists() ?: [];
@@ -51,7 +51,7 @@ class AlbumsController extends AppController
         $album = $this->Albums->newEmptyEntity();  // Create a new album entity
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists() ?: [];
+        $artists = $this->artistsApi->getArtists();
 
         if ($this->request->is('post')) {
             // Load the form data, including the artist_name field
@@ -66,8 +66,8 @@ class AlbumsController extends AppController
                 //Queue system — it’s more useful for sending bulk emails in the background.
 
                 // uncomment below to test the email notification
-                // $notificationAction = new SendEmail();
-                // $notificationAction->sendConfirmationEmail($album, $artists, 'added');
+                $notificationAction = new SendEmail();
+                $notificationAction->sendConfirmationEmail($album, $artists, 'added');
                 
                 return $this->redirect(['action' => 'index']);
             }
@@ -104,7 +104,7 @@ class AlbumsController extends AppController
         }
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists() ?: [];
+        $artists = $this->artistsApi->getArtists();
 
         if ($this->request->is(['post', 'put'])) {
             $album = $this->Albums->patchEntity($album, $this->request->getData());
@@ -117,8 +117,8 @@ class AlbumsController extends AppController
                 //Queue system — it’s more useful for sending bulk emails in the background.
 
                 // uncomment below to test the email notification
-                // $notificationAction = new SendEmail();
-                // $notificationAction->sendConfirmationEmail($album, $artists, 'edited');  // Passing the album to the email function
+                $notificationAction = new SendEmail();
+                $notificationAction->sendConfirmationEmail($album, $artists, 'edited');  // Passing the album to the email function
                 
                 return $this->redirect(['action' => 'index']);
             }
@@ -150,7 +150,7 @@ class AlbumsController extends AppController
         $album = $this->Albums->get($id);
 
         // Get the list of artists from the API
-        $artists = $this->artistsApi->getArtists();
+        $artists = $this->artistsApi->getArtists() ?: []; //UPDATED 28/11
 
         // Attempt to delete the album
         if ($this->Albums->delete($album)) {
@@ -162,8 +162,8 @@ class AlbumsController extends AppController
             //Queue system — it’s more useful for sending bulk emails in the background.
 
             // uncomment below to test the email notification
-            // $notificationAction = new SendEmail();
-            // $notificationAction->sendConfirmationEmail($album, $artists, 'deleted');  // Passing the album to the email function
+            $notificationAction = new SendEmail();
+            $notificationAction->sendConfirmationEmail($album, $artists, 'deleted');  // Passing the album to the email function
             
             // Redirect to the index page or another page
             return $this->redirect(['action' => 'index']);
